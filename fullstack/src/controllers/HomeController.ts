@@ -1,5 +1,6 @@
 import type { Request, Response } from 'express';
 import { books } from '../data/Books.js'; 
+import { Book } from '../models/Book.js'; 
 
 
 export class HomeController {
@@ -32,6 +33,18 @@ export class HomeController {
 
         res.render('home/books', viewData); 
 
-    }  
+    }
+
+      static show(req: any, res: any)  
+
+  { 
+
+    const book = Book.findById(books, parseInt(req.params.id)); 
+
+ 
+
+    res.render('home/show', { book: book }) 
+
+  } 
 }
 
