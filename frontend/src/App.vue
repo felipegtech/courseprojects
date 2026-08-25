@@ -52,13 +52,18 @@ import { RouterLink, RouterView } from 'vue-router';
 
             > 
 
-              <i class="fas fa-info-circle mr-3"></i> 
+              <i class="fas fa-info-circle mr-3"></i>
 
-              <span>About</span> 
+              <span>About</span>
 
-            </RouterLink> 
+            </RouterLink>
 
-          </nav> 
+            <RouterLink to="/books" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-700 transition duration-200">
+              <i class="fas fa-book mr-3"></i>
+              <span>Books</span>
+            </RouterLink>
+
+          </nav>
 
         </div> 
 
