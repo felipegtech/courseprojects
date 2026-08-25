@@ -1,6 +1,7 @@
 import type { BookInterface } from '@/interfaces/BookInterface';
-import { useBookStore } from '@/stores/bookstore.js';
+import { useBookStore } from '@/stores/bookStore.js';
 import type { CreateBookDTO } from '@/dtos/CreateBookDTO.js';
+import { nextId } from '@/utils/nextId.js';
 
 export class BookService {
   static getBooks(): BookInterface[] {
@@ -12,7 +13,12 @@ export class BookService {
   }
 
   static createBook(book: CreateBookDTO): void {
-    const id = useBookStore().books.length + 1;
-    useBookStore().books.push({ id, ...book });
+    const store = useBookStore();
+    store.books.push({ id: nextId(store.books), ...book });
+  }
+
+  static getUniqueCategories(): string[] {
+    const categories = useBookStore().books.map((book) => book.category);
+    return Array.from(new Set(categories));
   }
 }

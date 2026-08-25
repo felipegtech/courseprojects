@@ -1,10 +1,23 @@
 <script setup lang="ts">
+import BookReviews from '@/components/BookReviews.vue';
 import { BookService } from '@/services/BookService.js';
 import { useRoute } from 'vue-router';
+import { computed } from 'vue';
 
 const route = useRoute();
-const bookId = Number(route.params.id);
-const book = BookService.getBookById(bookId);
+const bookId = computed(() => Number(route.params.id));
+const book = computed(() => BookService.getBookById(bookId.value));
+
+function formatToCOP(price: number): string {
+  const formatter = new Intl.NumberFormat('es-CO', {
+    style: 'currency',
+    currency: 'COP',
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  });
+
+  return formatter.format(price).replace(/^\s*\$\s?/, '');
+}
 </script>
 
 <template>
@@ -15,7 +28,11 @@ const book = BookService.getBookById(bookId);
           <div class="bg-white rounded-lg shadow-md p-8 mb-8">
             <div class="flex items-start space-x-8">
               <div>
-                <img src="https://picsum.photos/seed/picsum/536/354" alt="Book Cover" class="object-cover rounded shadow-sm w-72 h-auto" />
+                <img
+                  src="https://picsum.photos/seed/picsum/536/354"
+                  alt="Book Cover"
+                  class="object-cover rounded shadow-sm w-72 h-auto"
+                />
               </div>
               <div>
                 <h2 class="text-2xl font-bold text-gray-800 mb-6">{{ book.title }}</h2>
@@ -43,7 +60,7 @@ const book = BookService.getBookById(bookId);
                 </div>
                 <div class="flex justify-between">
                   <span class="text-gray-600">Price:</span>
-                  <span class="font-medium">${{ book.price }}</span>
+                  <span class="font-medium">${{ formatToCOP(book.price) }} COP</span>
                 </div>
                 <div class="flex justify-between">
                   <span class="text-gray-600">Stock:</span>
@@ -55,5 +72,16 @@ const book = BookService.getBookById(bookId);
         </div>
       </div>
     </div>
+
+    <div class="bg-white rounded-lg shadow-md p-6 mt-8">
+      <BookReviews :book-id="book.id" />
+    </div>
+  </section>
+  <section v-else class="max-w-2xl mx-auto text-center py-16">
+    <h2 class="text-xl font-semibold text-gray-800 mb-2">Book not found</h2>
+    <p class="text-gray-500 mb-6">We couldn't find a book with id {{ bookId }}.</p>
+    <RouterLink to="/books" class="text-blue-600 font-medium hover:underline">
+      Back to all books
+    </RouterLink>
   </section>
 </template>
