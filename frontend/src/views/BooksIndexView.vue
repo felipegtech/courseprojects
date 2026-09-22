@@ -1,14 +1,24 @@
 <script setup lang="ts">
 import { BookService } from '@/services/BookService.js';
-import { computed, ref } from 'vue';
+import type { BookInterface } from '@/interfaces/BookInterface.js';
+import { computed, onMounted, ref } from 'vue';
 
-const books = BookService.getBooks();
-const selectorCategories = BookService.getUniqueCategories();
+const books = ref<BookInterface[]>([]);
 const selectedCategory = ref('');
 
-const filteredBooks = computed(() =>
-  selectedCategory.value ? books.filter((book) => book.category === selectedCategory.value) : books,
+const selectorCategories = computed(() =>
+  Array.from(new Set(books.value.map((book) => book.category))),
 );
+
+const filteredBooks = computed(() =>
+  selectedCategory.value
+    ? books.value.filter((book) => book.category === selectedCategory.value)
+    : books.value,
+);
+
+onMounted(async () => {
+  books.value = await BookService.getBooks();
+});
 
 function formatToCOP(price: number): string {
   const formatter = new Intl.NumberFormat('es-CO', {
