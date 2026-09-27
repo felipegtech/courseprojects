@@ -10,7 +10,7 @@ import { Review } from './books/entities/review.entity.js';
   imports: [
     TypeOrmModule.forRoot({
       type: 'better-sqlite3',
-      database: 'db.sqlite',
+      database: process.env.SQLITE_PATH ?? 'db.sqlite',
       entities: [Book, Review],
       synchronize: true,
     }),

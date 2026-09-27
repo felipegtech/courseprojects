@@ -1,5 +1,4 @@
 # compiled output
-/dist
 /node_modules
 *.tsbuildinfo
 
@@ -55,3 +54,11 @@ pids
 # SQLite database
 *.sqlite
 *.sqlite3
+
+node_modules
+coverage
+.git
+.gitignore
+*.md
+test
+.env.*
